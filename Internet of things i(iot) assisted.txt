@@ -1,0 +1,37 @@
+Internet of things i(iot) assisted context aware fertilizer
+
+
+
+Arfat Khan et al. [1] proposed Internet of Things(ioLR, SVM, GNB, KNN for fertilizer recommendation it is used in Real-time soil fertility mapping through IoT for accurate fertilizer recommendations.Evaluation shows GNB model is most accurate for fertilizer prediction.Costly, time-consuming, and laborious methods for soil fertility mapping. 
+
+
+
+
+
+impacts of population growth economic
+
+
+Uwe A. Schneider et al.[2] it is used Global, partial equilibrium model of agricultural and forest sectors. Global food production impacts analyzed under various development scenarios.Model assesses interdependencies between land, water, and food Excludes extreme weather events and climate change impacts until 2030. Ignores dynamics of soil quality, soil restoration benefits, and losses and does not consider water storage options and bioenergy demand policies.
+
+Weather bASED cROP
+
+RISHI GUPTA et al.[3] uses MapReduce framework, k-means clustering, recommender system, bar graphs.
+nalyzing agricultural data to improve crop production using data mining.Implementing MapReduce, k-means clustering, and recommender system for anal
+Discussing big data analytics, crop yield prediction, and weather forecasting techniques. 
+
+Addressing challenges and future scope of big data analysis in agriculture. 
+
+
+
+Intelligent crop recommendation, Precision Agriculture using Map-Reduce, machine learning approaches
+
+
+RISHI GUPTA et al.[3] proposed WB-CPI: Weather Based Crop Prediction in India, implements Naive Bayes classifier, Enhanced crop prediction accuracy using big data analytics.Future scope of this project is to remove technical gaps, small farms, data scarcity, and varied harvesting systems and callenges in quality farming in India.
+
+JAMALBEK TUSSUPOV et al.[5] proposed Analysis of Formal Concepts for Verification of Pests and Diseases, Utilizes logistic regression, XGBoost, and Vanilla CNN for spectral data analysis. Future scope of the project is to less Overtraining of models during testing phase. Logistic regression model showed relatively poor performance compared to others where in suggested to use other algorithms.
+
+MD. NAJMUL MOWLA et al.[7] proposed Internet of Things and Wireless Sensor Networks for Smart Agriculture Applications, proposed IoT and WSN applications in smart agriculture. Future scope of this project is to avoid challenges in system infrastructure, device selection, and network architecture. Improve data privacy and security concerns with interconnected SA systems.
+
+ARFAT AHMAD KHAN et al.[9] proposed Context Aware Evapotranspiration (ETs) for Saline Soils Reclamation, implements IoT and machine learning for saline soil reclamation.Monthly ET predictions using LSTM models for effective leaching process. Context-aware monthly ET estimations for saline soil reclamation. IoT-enabled crop field contexts used for LSTM and ensembled LSTM models. Ensembled LSTM model more accurate than LSTM for ET predictions.
+
+Mohammad Motiur Rahman et al.[10] proposed Machine Learning Facilitated Rice Prediction in Bangladesh, for predicting of crop yield in Bangladesh uses machine learning models. Used classifiers like ensemble learning and linear regression for prediction. Future scope of this project is to make data compatibility between BBS and BMD. Reduce lack of separate weather data for every subdivision.

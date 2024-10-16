@@ -1,0 +1,113 @@
+AW
+  LatestImage:
+    Description: Latest Amazon Linux Image (Region Specific)
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+Resources:
+#This is the security group that we are creating for our stack
+  MyCFSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: SG to allow web traffic over port 80
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+#This is the load balancer for our stack
+  MyCFLoadBalancer:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    Properties:
+      SecurityGroups:
+        - !GetAtt 
+          - MyCFSecurityGroup
+          - GroupId
+      Subnets: !Ref Subnets
+
+#This is the listner for our load balancer
+  MyCFListener:
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref MyCFTargetGroup
+      LoadBalancerArn: !Ref MyCFLoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+#This is the target group for our load balancer
+  MyCFTargetGroup:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId: !Ref VpcId
+
+#This is the launch template that tells our auto scaling group which type of EC2 instances to create - it includes the web server information we used earlier
+  MyCFLaunchTemplate:
+    Type: 'AWS::EC2::LaunchTemplate'
+    Properties:
+      LaunchTemplateData:
+        ImageId: !Ref LatestImage
+        InstanceType: t2.micro
+        KeyName: !Ref KeyName
+        MetadataOptions:
+          HttpTokens: optional
+        SecurityGroupIds:
+          - !GetAtt 
+            - MyCFSecurityGroup
+            - GroupId
+        UserData: !Base64 
+          'Fn::Sub': >
+            #!/bin/bash
+
+            yum update -y
+
+            yum install -y httpd
+
+            systemctl start httpd
+
+            systemctl enable httpd
+
+            IPADD=$(curl -s
+            http://169.254.169.254/latest/meta-data/public-ipv4)   SECGR=$(curl
+            -s http://169.254.169.254/latest/meta-data/security-groups)
+            INSTANCE=$(curl -s
+            http://169.254.169.254/latest/meta-data/instance-type)  
+            AZONE=$(curl -s
+            http://169.254.169.254/latest/meta-data/placement/availability-zone)
+
+            echo '<h1>Public IP Address: IPADD </br>Security Group(s): SECGR
+            </br>Availability Zone: AZONE </br>Instance Type: INSTANCE</h1>' >
+            /var/www/html/index.txt 
+
+            sed "s/AZONE/$AZONE/; s/IPADD/$IPADD/; s/SECGR/$SECGR/;
+            s/INSTANCE/$INSTANCE/" /var/www/html/index.txt >
+            /var/www/html/index.html
+
+#This is the auto scaling group for our stack
+  MyCFAutoScalingGroup:
+    Type: 'AWS::AutoScaling::AutoScalingGroup'
+    Properties:
+      VPCZoneIdentifier: !Ref Subnets
+      Cooldown: 30
+      DefaultInstanceWarmup: 15
+      LaunchTemplate:
+        LaunchTemplateId: !GetAtt 
+          - MyCFLaunchTemplate
+          - LaunchTemplateId
+        Version: !GetAtt 
+          - MyCFLaunchTemplate
+          - LatestVersionNumber
+      MaxSize: 2
+      MinSize: 2
+      TargetGroupARNs:
+        - !Ref MyCFTargetGroup
+Outputs:
+#This helps us access our load balancer faster
+  LoadBalancerDNSName:
+    Description: The DNSName of the load balancer
+    Value: !GetAtt MyCFLoadBalancer.DNSName
